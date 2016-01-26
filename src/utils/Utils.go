@@ -33,7 +33,25 @@ type IndexInterface interface {
 	Query(key interface{}) ([]DocIdNode, bool)                     //关键词查询[倒排]
 	Serialization() error                                          //序列化数据
 	Filter(docid uint64, filtertype uint64, start, end int64) bool //过滤操作[正排]【>,<,==,!=,<>》】
-	GetValue(docid uint64) (string, bool)                          //对于字符型正排，获取值
-	GetIntValue(docid uint64) (int64, bool)                        //对于数字型正排，获取值
+	GetStringValue(docid uint64) (string, bool)                    //对于字符型正排，获取值
+	GetNumberValue(docid uint64) (int64, bool)                     //对于数字型正排，获取值
 	Destroy() error                                                //销毁这个字段的内容
+}
+
+// InvertInterface interface description : 倒排索引的接口
+type InvertInterface interface {
+	AddDocument(docid uint64, contentstr string) error //添加文档
+	Query(key interface{}) ([]DocIdNode, bool)         //关键词查询[倒排]
+	Serialization(filename string) error               //序列化数据
+	Destroy() error                                    //销毁内容
+}
+
+// ProfileInterface interface description : 正排索引的接口
+type ProfileInterface interface {
+	AddDocument(docid uint64, contentstr string) error             //添加文档
+	Filter(docid uint64, filtertype uint64, start, end int64) bool //过滤操作[正排]【>,<,==,!=,<>》】
+	GetStringValue(docid uint64) (string, bool)                    //对于字符型正排，获取值
+	GetNumberValue(docid uint64) (int64, bool)                     //对于数字型正排，获取值
+	Serialization(filename string) error                           //序列化数据
+	Destroy() error                                                //销毁内容
 }
